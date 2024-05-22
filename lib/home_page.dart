@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.jobs == null) {
-            return const Center(child: Text('No jobs found'));
+            return const Center(child: Text(''));
           } else {
             return ListView.builder(
               itemCount: snapshot.data!.jobs!.length,
@@ -43,23 +43,35 @@ class _HomePageState extends State<HomePage> {
                   margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
-                    child: ListTile(
-                      title: Text(
-                        job.jobTitle ?? '',
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        job.companyLogo != null ? Center(
+                          child: Image.network(
+                            job.companyLogo!,
+                            height: 50,
+                          ),
+                        ) : Container(),
+                        const SizedBox(height: 10),
+                        ListTile(
+                          title: Text(
+                            job.jobTitle ?? '',
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 5),
+                              Text('Company: ${job.companyName ?? ''}'),
+                              Text('Type: ${job.jobType?.join(', ') ?? ''}'),
+                              Text('Salary: ${job.annualSalaryMin ?? ''} - ${job.annualSalaryMax ?? ''}'),
+                            ],
+                          ),
+                          trailing: const Icon(Icons.keyboard_arrow_right),
                         ),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 5),
-                          Text('Company: ${job.companyName ?? ''}'),
-                          Text('Type: ${job.jobType?.join(', ') ?? ''}'),
-                          Text('Salary: ${job.annualSalaryMin ?? ''} - ${job.annualSalaryMax ?? 'N/A'}'),
-                        ],
-                      ),
-                      trailing: const Icon(Icons.keyboard_arrow_right),
+                      ],
                     ),
                   ),
                 );
@@ -78,7 +90,7 @@ class _HomePageState extends State<HomePage> {
     if (response.statusCode == 200) {
       return JobData.fromJson(convert.jsonDecode(response.body));
     } else {
-      throw Exception('Gagal mengambilj');
+      throw Exception('gagal');
     }
   }
 }

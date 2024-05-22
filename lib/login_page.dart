@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('username', _usernameController.text);
       prefs.setString('password', _passwordController.text);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(),));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
 
     }
   }
